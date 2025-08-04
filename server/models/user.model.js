@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
     email:{
             type: String,
             required: [true, "email required to create an account!"],
-            validator: val => /^([\w\-/.]+@([\w\-]+\.+[\w\-]+)$)/.test(val),
+            validator: val => /^([\w\-\.]+@([\w\-]+\.+[\w\-]+)$)/.test(val),
             message: "Invalid entry for eamil. Try again."
     },
     password:{
