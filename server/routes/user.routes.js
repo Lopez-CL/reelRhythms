@@ -2,7 +2,6 @@ const userController = require('../controllers/user.controller');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const { error } = require('console');
 const verifyUpload = multer({
     storage: multer.memoryStorage(),
     limits: {fileSize: 5*1024*1024},

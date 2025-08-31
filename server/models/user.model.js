@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     },
     profImg:{
         type: Buffer
-    }
+    },
 }, 
 { timestamps: true });
 
@@ -44,13 +44,5 @@ UserSchema.pre('save', async function(next){
     }
     next();
 })
-UserSchema.virtual("filmCalendars",{
-    ref: "FilmCalendar",
-    localField: '_id',
-    foreignField: "user",
-    justOne: false
-})
-UserSchema.set('toObject', {virtuals: true})
-UserSchema.set('toJSON',{virtuals:true})
 
-module.exports = mongoose.Model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

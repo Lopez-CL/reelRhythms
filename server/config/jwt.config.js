@@ -6,6 +6,7 @@ module.exports.authenticateUser = (req, res, next) =>{
     if(!token) return res.status(401).json({msg: "Unable to locate authenticating item"});
     jwt.verify(token, KEY, (err, payload)=>{
         if(err) return res.status(401).json({verified: false})
+        req.user = payload;
         next();
     })
 }

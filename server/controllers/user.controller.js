@@ -1,9 +1,10 @@
-const User = require("../models/user.model");
+const User = require('../models/User.model');
+const UserFilmCalJoin = require("../models/UserAndFilmCal.model")
 const KEY = process.env.APP_KEY;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-module.exports.registerUser = (async (req,res )=>{
+module.exports.registerUser = async (req,res )=>{
     const {userName, email, password, confirmPassword} = req.body;
     try{
         const newUser = await User.create({
@@ -25,20 +26,22 @@ module.exports.registerUser = (async (req,res )=>{
     }catch(err){
         res.status(400).json({err: "Invalid login credentials"});
     }
-})
+}
 
 module.exports.login = async (req, res)=>{
     const {email, password} = req.body;
-    const foundUser = await User.findOne({email});
+    const foundUser = await User.findOne({email})
     if(!foundUser) res.status(400).json({err: "Invalid login credentials"});
     try{
         const pwCheck = await bcrypt.compare(foundUser.password, password)
         if(!pwCheck) res.status(400).json({err: "Invalid login credentials"});
         const userToken = jwt.sign({_id: foundUser._id, email: foundUser.email}, KEY,{expiresIn:'2hr'});
+        const usersFilmCalendars = UserFilmCalJoin.find({user: foundUser._id}).populate('filmCalendar', "title seasons")
         if(foundUser.profImg?.data && foundUser.password){
             let userObj = foundUser.toObject();
             userObj.profImg = Buffer.from(foundUser.profImg.data).toString('base64');
             delete userObj.password;
+            userObj.filmCalends = (await usersFilmCalendars).map(jObj => jObj.filmCalendar)
             res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge: 1000 * 60 *120}).json({userData: userObj});
         }else{
             res.status(500).json({err:"Issue with mutating user data for response"})

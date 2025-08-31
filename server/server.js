@@ -6,7 +6,7 @@ const MYPORT = 8000;
 
 require('./config/mongoose.config')
 require('dotenv').config()
-
+require('./routes/user.routes')(app)
 app.use(express.json(), express.urlencoded({extended: true}));
 app.use(cookieParser())
 app.use(cors({
