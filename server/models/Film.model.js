@@ -6,7 +6,7 @@ const FilmSchema = new Schema({
         required: true
     },
     iMDB_ID:{
-        type: Number,
+        type: String,
         required: true
     }
 }, {timestamps:true})

@@ -1,41 +1,43 @@
-import mongoose from "mongoose";
-import bcrypt from 'bcrypt';
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const UserSchema = new mongoose.Schema({
-    userName:{
+    username:{
         type: String,
         minLength: [2, "Username must be two characters or more."],
-        required: [true, 'username required to create an account!'],
+        required: [true, 'Username required to create an account!'],
     },
     email:{
             type: String,
+            unique: true,
             required: [true, "email required to create an account!"],
-            validator: val => /^([\w\-\.]+@([\w\-]+\.+[\w\-]+)$)/.test(val),
-            message: "Invalid entry for eamil. Try again."
+            validate: {validator: val => /^[\w.-]+@[\w.-]+\.\w+$/.test(val),
+            message: "Invalid entry for eamil. Try again."}
     },
     password:{
         type: String,
         required: [true, "password required to create an account"],
         minLength: [8, "Passoword must be 8 characters of longer"]
     },
-    confirmPassword:{
-        type: String,
-        required: [true, "please confrim password"],
-    },
     profImg:{
-        type: Buffer
-    },
+        data: Buffer,
+        mimetype: String
+    }
 }, 
-{ timestamps: true });
+{ timestamps: true }, {id: false});
 
 //middleware and virtual field creation
-UserSchema.pre('validate', function(next){
-    if(this.password !== this._confirmPassword) this.invalidate("password","password do not match, back-end Error");
+UserSchema.virtual('confirmPassword')
+    .get(function(){return this._confirmPassword})
+    .set(function(val){ return this._confirmPassword = val})
+
+    UserSchema.pre('validate', function(next){
+    if(this.isModified('password')){
+        if(this.password !== this.confirmPassword) this.invalidate("password","passwords do not match!")
+    }
     next();
 })
-UserSchema.virtual('confirmPassword')
-    .get(() => this._confirmPassword)
-    .set(val => this._confirmPassword = val);
 UserSchema.pre('save', async function(next){
+    if(!this.isModified('password'))return next()
     try{
         const pwToHash = await bcrypt.hash(this.password, 12);
         this.password = pwToHash;
@@ -44,5 +46,12 @@ UserSchema.pre('save', async function(next){
     }
     next();
 })
-
+UserSchema.virtual("filmCalendars",{
+    ref: "FilmCalendar",
+    localField: "_id",
+    foreignField: "creatorID",
+    justOne: false
+})
+UserSchema.set('toJSON', {virtuals:true})
+UserSchema.set('toObject', {virtuals:true})
 module.exports = mongoose.model("User", UserSchema);

@@ -3,15 +3,17 @@ const app = express();
 const cors =  require('cors');
 const cookieParser = require('cookie-parser');
 const MYPORT = 8000;
-
-require('./config/mongoose.config')
 require('dotenv').config()
-require('./routes/user.routes')(app)
+
 app.use(express.json(), express.urlencoded({extended: true}));
 app.use(cookieParser())
 app.use(cors({
-    origin: 'http://localhost3000:',
+    origin: 'http://localhost:3000',
     credentials: true
 }))
+require('./config/mongoose.config')
+require('./routes/user.routes')(app)
+require('./routes/filmCalendar.routes')(app)
+require('./routes/film.routes')(app)
 
-app.listen(MYPORT, ()=> console.log(`Listing on ${MYPORT}`));
+app.listen(MYPORT, ()=> console.log(`Listening on ${MYPORT}`));

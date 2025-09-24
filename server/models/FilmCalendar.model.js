@@ -28,12 +28,17 @@ const FilmCalendarSchema = new Schema({
         type: String,
         required: false,
         maxlength:[250, "You calendar details cannot be more than 250 characters"]
+    },
+    creatorID:{
+        type: Types.ObjectId,
+        ref: "User",
     }
 }, {timestamps: true})
 
 FilmCalendarSchema.index({'films.film':1});
 FilmCalendarSchema.index({'films.film':1, 'films.watchDate':1});
 FilmCalendarSchema.index({'films.watchDate':1});
+FilmCalendarSchema.index({'creatorID':1})
 
 module.exports = model("FilmCalendar", FilmCalendarSchema);
 
