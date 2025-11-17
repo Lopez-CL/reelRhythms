@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     },
     email:{
             type: String,
-            unique: true,
+            unique: true, // what in terms of messaging can I do to communicate "account already exists"
             required: [true, "email required to create an account!"],
             validate: {validator: val => /^[\w.-]+@[\w.-]+\.\w+$/.test(val),
             message: "Invalid entry for eamil. Try again."}
@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
         mimetype: String
     }
 }, 
-{ timestamps: true }, {id: false});
+{ timestamps: true });
 
 //middleware and virtual field creation
 UserSchema.virtual('confirmPassword')

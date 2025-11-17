@@ -29,7 +29,7 @@ module.exports = app =>{
         }else if(error){
             return res.status(500).json({errMsg: 'server side issue on file upload'})}
     })
-    app.get('/api/users/logout', userController.logOut),
-    app.get('/api/users/getUser/:_id', userController.getUser);
+    app.get('/api/users/logout', userController.logOut)
+    app.get('/api/users/getUser/:_id', userController.getUser)
     app.get('/api/users/getAvatar/:_id', userController.getUserAvatar)
 }
