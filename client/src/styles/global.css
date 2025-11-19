@@ -1,0 +1,80 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=fallback');
+
+@layer reset{
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html {
+    interpolate-size: allow-keywords;
+}
+
+html,
+body {
+    height: 100%;
+    background: #333;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,a,span,h1,h2,h3,h4,h5,h6 {
+    overflow-wrap: break-word;
+    color: #fff;
+}
+
+#root,
+#__next {
+    isolation: isolate;
+}
+}
+@layer Global{
+:root{
+    --heading-1: 700 4rem "Libre Baskerville", Helvetica, sans-serif;
+    --heading-2: 500 3rem "Libre Baskerville", Helvetica, sans-serif;
+    --heading-3: 450 1.8rem "Libre Baskerville", Helvetica, sans-serif;
+    --paragrph: 400 1.1rem "Inter", Helvetica, sans-serif;
+    --rr-red-sorbet: #EF626A;
+    --rr-dark-lime: #00AA66;
+    --rr-vibrant-plum: #8481FF;
+}
+
+/* Typography & Layouts */
+h1{font: var(--heading-1);}
+h2{font: var(--heading-2);}
+h3{font: var(--heading-3);}
+p,span,a{font: var(--paragrph);}
+a{text-decoration: none;}
+section{width: 75%}
+.center-in-page{
+    margin-inline: auto;
+}
+.stack *+*{
+    margin-block-start: 1rem;
+}
+}

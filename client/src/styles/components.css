@@ -1,0 +1,29 @@
+/* Header */
+header, .return-link-logo {
+    display: flex;
+    align-items:baseline;
+    .logo{
+        align-self: center;
+    }
+}
+header{
+    justify-content: space-between;
+    margin-inline: 16px;
+    padding-block: .5rem;
+}
+.return-link-logo{gap: 1rem;}
+nav{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.cta-grid{
+    display: grid;
+    margin-block-start: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(calc(950px/3), 1fr));
+    .cta-item{
+        img{justify-self: center;}
+        h3,p{text-align: center; text-wrap-style:balance;}
+    }
+}
