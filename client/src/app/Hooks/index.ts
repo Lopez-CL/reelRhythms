@@ -1,1 +1,0 @@
-export {default as UseNativeInput} from './useNativeInput';

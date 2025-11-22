@@ -3,5 +3,5 @@ export interface userData {
     email: string,
     password: string,
     confirmPassword: string,
-    profImg ?: File
+    profImg: File | null
 }

@@ -8,7 +8,8 @@ module.exports.ensureDefaultImg = (req, res, next) =>{
                 mimetype: 'image/png',
                 originalname: 'defaultUser.png'
             }
-        next()
+
     }
+    next()
     }
         

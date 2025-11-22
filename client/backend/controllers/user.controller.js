@@ -1,5 +1,5 @@
 const User = require('../models/user.model');
-const KEY = process.env.APP_KEY;
+const KEY = process.env.APP_KEY
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -16,6 +16,9 @@ module.exports.registerUser = async (req,res )=>{
                 mimetype: req.file.mimetype
             }
         })
+        console.log("🔥 CONTROLLER RUNNING");
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
         const userToken = jwt.sign({userEmail: newUser.email, _id: newUser._id}, KEY, {expiresIn:'2h'})
         if(newUser.profImg && newUser.password ){
             let userObj = newUser.toObject();
@@ -91,8 +94,8 @@ module.exports.getUser = async (req,res) =>{
 module.exports.getUserAvatar = async (req,res) =>{
     try{
         const user = await User.findById(req.params._id).select("profImg");
-    if(!user?.profImg) return res.status(404).json({err: "Unable to fetch user"})
-        res.set("Content-Type", user.profImg.mimetype)
+    if(!user.profImg) return res.status(404).json({err: "Unable to fetch user"})
+    res.set("Content-Type", user.profImg.mimetype)
     res.send(user.profImg.data)
     }catch(err){
         res.status(500).json({err: "Issue with fetching image data"});
