@@ -16,9 +16,6 @@ module.exports.registerUser = async (req,res )=>{
                 mimetype: req.file.mimetype
             }
         })
-        console.log("🔥 CONTROLLER RUNNING");
-        console.log("BODY:", req.body);
-        console.log("FILE:", req.file);
         const userToken = jwt.sign({userEmail: newUser.email, _id: newUser._id}, KEY, {expiresIn:'2h'})
         if(newUser.profImg && newUser.password ){
             let userObj = newUser.toObject();

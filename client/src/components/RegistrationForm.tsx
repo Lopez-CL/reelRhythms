@@ -1,18 +1,19 @@
 'use client'
-import React,{useState} from "react";
+import React, { useState } from "react";
 import * as Types from "@/types/index";
 import * as Hooks from "@/hooks/index";
-
-const RegForm:React.FC = () =>{
+import { useRouter } from "next/navigation";
+const RegForm: React.FC = () => {
     const [formData, setFormData] = useState<Types.userData>({
-        username:"",
+        username: "",
         email: "",
-        password:"",
-        confirmPassword:"",
+        password: "",
+        confirmPassword: "",
         profImg: null
     })
+    const router = useRouter()
     const handleInput = Hooks.useNativeInput(formData, setFormData)
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) =>{
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const multPtData = new FormData();
         multPtData.append("username", formData.username)
@@ -25,10 +26,13 @@ const RegForm:React.FC = () =>{
         //     const value = formData[typedKey]
         //     if(value !== null) multPtData.append(key, value)
         // }
-        try{
-            fetch("http://localhost:8000/backend/api/users/register",{method: "POST", body: multPtData})
-            console.log("sent fetch")
-        }catch(e){console.log(e)}
+        try {
+            fetch("http://localhost:8000/backend/api/users/register", { method: "POST", body: multPtData })
+                .then(() => {
+                    console.log("sent fetch")
+                    router.push('/dashboard')
+                })
+        } catch (e) { console.log(e) }
         // alert(JSON.stringify(formData));
         // const resetFormData = Object.keys(formData).reduce((acc, key)=>{
         //     acc[key] = ''
@@ -36,13 +40,13 @@ const RegForm:React.FC = () =>{
         // }, {} as typeof formData)
         // setFormData(resetFormData);
     }
-    return(
+    return (
         <form className="form form-register">
-            <input value={formData.username} name="username" onChange={handleInput} type="text" aria-label="username" placeholder="Username"/>
-            <input required value={formData.email} name="email" onChange={handleInput} type="email" aria-label="email" placeholder="Email"/>
-            <input value={formData.password} name="password" onChange={handleInput} type="password" autoComplete="new-password" aria-label="password" placeholder="password"/>
-            <input value={formData.confirmPassword} name="confirmPassword" onChange={handleInput} type="password" autoComplete="new-password" aria-label="confirm password" placeholder="confirm password"/>
-            <input  name="profImg" type="file" onChange={handleInput} aria-label="upload profile image"/>
+            <input value={formData.username} name="username" onChange={handleInput} type="text" aria-label="username" placeholder="Username" />
+            <input required value={formData.email} name="email" onChange={handleInput} type="email" aria-label="email" placeholder="Email" />
+            <input value={formData.password} name="password" onChange={handleInput} type="password" autoComplete="new-password" aria-label="password" placeholder="password" />
+            <input value={formData.confirmPassword} name="confirmPassword" onChange={handleInput} type="password" autoComplete="new-password" aria-label="confirm password" placeholder="confirm password" />
+            <input name="profImg" type="file" onChange={handleInput} aria-label="upload profile image" />
             <button onClick={handleSubmit}>Register With Us</button>
         </form>
     )

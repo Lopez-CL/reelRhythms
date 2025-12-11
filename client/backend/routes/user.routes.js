@@ -1,12 +1,13 @@
 const userController = require('../controllers/user.controller');
 const path = require('path');
 const multer = require('multer');
+const {authenticate} = require('../config/jwt.config')
 const {ensureDefaultImg} = require('../utilities/defaultAvatar');
 const verifyUpload = multer({
     storage: multer.memoryStorage(),
     limits: {fileSize: 5*1024*1024},
     fileFilter: function(req,file, cb){
-    console.log("📸 fileFilter triggered, file:", file?.originalname);
+    // console.log("📸 fileFilter triggered, file:", file?.originalname);
     const allowed = /png|jpe?g/i;
     const ok = allowed.test(file.mimetype) && allowed.test(path.extname(file.originalname));
     return ok ? cb(null, true) : cb(new Error("Invalid file type"));
@@ -14,10 +15,10 @@ const verifyUpload = multer({
 })
 
 module.exports = router => {
-    router.post('/api/users/register', (req, res, next) => {
-    console.log("🔥 ROUTE REACHED (before multer)");
-    next();
-    });
+    // router.post('/api/users/register', (req, res, next) => {
+    // console.log("🔥 ROUTE REACHED (before multer)");
+    // next();
+    // });
     router.post('/api/users/register',
         verifyUpload.single('profImg'),
         ensureDefaultImg,
@@ -35,7 +36,9 @@ module.exports = router => {
     router.get('/api/users/logout', userController.logOut);
     router.get('/api/users/getUser/:_id', userController.getUser);
     router.get('/api/users/getAvatar/:_id', userController.getUserAvatar);
-
+    router.get('/api/authenticate', authenticate, (req, res)=>{
+        res.status(200).json({message: "user is authenticated"})
+    })
     // Global multer/server error handler
     router.use((err, req, res, next) => {
         if (err instanceof multer.MulterError) {
