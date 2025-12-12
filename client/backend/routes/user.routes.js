@@ -1,35 +1,52 @@
 const userController = require('../controllers/user.controller');
 const path = require('path');
 const multer = require('multer');
+const {authenticate} = require('../config/jwt.config')
 const {ensureDefaultImg} = require('../utilities/defaultAvatar');
 const verifyUpload = multer({
     storage: multer.memoryStorage(),
     limits: {fileSize: 5*1024*1024},
     fileFilter: function(req,file, cb){
-        if(file){
-            const fileType = /png|jpe?g|/
-            const mimeTypeOK = fileType.test(file.mimetype);
-            const extNameOK = fileType.test(path.extname(file.originalname.toLowerCase()))
-            if(mimeTypeOK && extNameOK)return cb(null, true)
-            return cb(new Error(`Issue with file verifcation. Please ensure file is of ${fileType} format and file size is 5MB or less`));
-        }
+    // console.log("📸 fileFilter triggered, file:", file?.originalname);
+    const allowed = /png|jpe?g/i;
+    const ok = allowed.test(file.mimetype) && allowed.test(path.extname(file.originalname));
+    return ok ? cb(null, true) : cb(new Error("Invalid file type"));
     }
 })
 
-module.exports = app =>{
-    app.post('/api/users/register', verifyUpload.single('profImg'), ensureDefaultImg, userController.registerUser, (error, req,res, next)=>{
-        if(error instanceof multer.MulterError){
-            return res.status(401).res.josn({errMsg:"Issue with file upload"})
-        }else if(error){return res.status(500).json({errMsg: 'server side issue on file upload'})}
+module.exports = router => {
+    // router.post('/api/users/register', (req, res, next) => {
+    // console.log("🔥 ROUTE REACHED (before multer)");
+    // next();
+    // });
+    router.post('/api/users/register',
+        verifyUpload.single('profImg'),
+        ensureDefaultImg,
+        userController.registerUser
+    );
+
+    router.get('/api/users/login', userController.login);
+
+    router.put('/api/users/updateUser/:_id',
+        verifyUpload.single('profImg'),
+        ensureDefaultImg,
+        userController.updateUserData
+    );
+
+    router.get('/api/users/logout', userController.logOut);
+    router.get('/api/users/getUser/:_id', userController.getUser);
+    router.get('/api/users/getAvatar/:_id', userController.getUserAvatar);
+    router.get('/api/authenticate', authenticate, (req, res)=>{
+        res.status(200).json({message: "user is authenticated"})
     })
-    app.get('/api/users/login', userController.login)
-    app.put('/api/users/updateUser/:_id', verifyUpload.single('profImg'),ensureDefaultImg, userController.updateUserData, (error, req,res, next) =>{
-        if(error instanceof multer.MulterError){
-            return res.status(401).json({errMsg:"Issue with file upload"})
-        }else if(error){
-            return res.status(500).json({errMsg: 'server side issue on file upload'})}
-    })
-    app.get('/api/users/logout', userController.logOut)
-    app.get('/api/users/getUser/:_id', userController.getUser)
-    app.get('/api/users/getAvatar/:_id', userController.getUserAvatar)
+    // Global multer/server error handler
+    router.use((err, req, res, next) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).json({ error: "Multer error", detail: err.message });
+        }
+        if (err) {
+            return res.status(500).json({ error: "Server error", detail: err.message });
+        }
+        next();
+    });
 }

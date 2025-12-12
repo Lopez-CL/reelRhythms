@@ -5,7 +5,7 @@ export default function LandingPage(){
             <Image className="center-in-page" style={{marginInline:"auto"}}src="/filmcal_hero.png" alt="film projector casting the image of a calendar with film reels in each day's box" width={500} height={500}/>
             <section className="center-in-page">
             <h2 style={{textAlign:"center"}}>Cue your Calendar!</h2>
-            <div className="cta-grid stack">
+            <div className="cta-grid ">
                 <div className="cta-item">
                     <Image src="/add_calendar.png" alt="''" aria-hidden= {"true"} width={125} height={125}/>
                     <h3>Schedule your films</h3>

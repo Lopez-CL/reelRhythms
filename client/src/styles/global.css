@@ -78,3 +78,14 @@ section{width: 75%}
     margin-block-start: 1rem;
 }
 }
+.flex-50-50{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5rem;
+    margin-inline: auto; 
+    width: fit-content;
+    > *{
+        flex-basis: 0;
+        min-width: 400px;
+    } 
+}

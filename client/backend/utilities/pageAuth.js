@@ -1,0 +1,15 @@
+const  PROTECTED_PATHS =['/dashboard'];
+module.exports =  async function pageAuth(req,res,next){
+    const isProtectedPath = PROTECTED_PATHS.some(pathname =>  req.path.startsWith(pathname))
+    if(isProtectedPath){
+        const serverRes = await fetch(`${req.protocol}://${req.get('host')}/backend/api/authenticate`,{
+            headers:{
+                cookie: req.headers.cookie
+            }
+        })
+        if(serverRes.status !== 200){
+            return res.redirect('/')
+        }
+    }
+    return next();
+}

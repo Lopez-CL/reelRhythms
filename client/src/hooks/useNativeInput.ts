@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
 
-const UseNativeInput = <T extends object>(
+const useNativeInput = <T extends object>(
     state: T,
     setSate: Dispatch<SetStateAction<T>>) => 
     (e: ChangeEvent<HTMLInputElement>) =>{
@@ -13,4 +13,4 @@ const UseNativeInput = <T extends object>(
         })
     }
 
-export default UseNativeInput;
+export default useNativeInput;

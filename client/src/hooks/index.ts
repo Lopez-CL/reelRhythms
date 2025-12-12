@@ -1,0 +1,1 @@
+export {default as useNativeInput} from './useNativeInput';
