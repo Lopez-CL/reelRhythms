@@ -21,11 +21,6 @@ const RegForm: React.FC = () => {
         multPtData.append("password", formData.password)
         multPtData.append("confirmPassword", formData.confirmPassword)
         if (formData.profImg instanceof File) multPtData.append("profImg", formData.profImg);
-        // for(const key in formData){
-        //     const typedKey = key as keyof typeof formData
-        //     const value = formData[typedKey]
-        //     if(value !== null) multPtData.append(key, value)
-        // }
         try {
             fetch("http://localhost:8000/backend/api/users/register", { method: "POST", body: multPtData })
                 .then(() => {
@@ -33,12 +28,6 @@ const RegForm: React.FC = () => {
                     router.push('/dashboard')
                 })
         } catch (e) { console.log(e) }
-        // alert(JSON.stringify(formData));
-        // const resetFormData = Object.keys(formData).reduce((acc, key)=>{
-        //     acc[key] = ''
-        //     return acc;
-        // }, {} as typeof formData)
-        // setFormData(resetFormData);
     }
     return (
         <form className="form form-register">

@@ -9,9 +9,9 @@ const NavBar: React.FC = () =>{
             <Icons.LinkDivider  />
             <Link href="/login">Login</Link>
             <Icons.LinkDivider  />
-            <Link href="/scheduleFilms">Schedule your Films</Link>
+            <Link href="/schedule-films">Schedule your Films</Link>
             <Icons.LinkDivider  />
-            <Link href="/exploreFilms">Explore Film Calendars</Link>
+            <Link href="/explore-films">Explore Film Calendars</Link>
         </nav>
     )
 } 
