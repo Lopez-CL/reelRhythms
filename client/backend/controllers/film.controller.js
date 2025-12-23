@@ -1,6 +1,21 @@
 const filmModel = require('../models/film.model');
 const FILM_KEY = process.env.OMBD_KEY;
 const OMBD_URL = `https://www.omdbapi.com/?apikey=${FILM_KEY}`
+
+module.exports.searchFilms = async (req, res) =>{
+    const {query} = req.body;
+    const fullURL = `${OMBD_URL}&s=${query}`;
+    try{
+        const results = await fetch(fullURL);
+        const filmsObj = await results.json()
+        if(results.json().length > 1) return res.status(201).json({filmsObj})
+            else return res.status(201).json({message:"No films were found"})
+    }
+    catch(err){
+        res.status(401).json({err:"unable to fetch film data"});
+    }
+}
+
 module.exports.addFilm = async (req, res)=>{
     const {title, iMDB_ID} = req.body;
     try{

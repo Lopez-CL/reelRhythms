@@ -15,28 +15,21 @@ const verifyUpload = multer({
 })
 
 module.exports = router => {
-    // router.post('/api/users/register', (req, res, next) => {
-    // console.log("🔥 ROUTE REACHED (before multer)");
-    // next();
-    // });
     router.post('/api/users/register',
         verifyUpload.single('profImg'),
         ensureDefaultImg,
         userController.registerUser
     );
-
-    router.get('/api/users/login', userController.login);
-
+    router.post('/api/users/login', userController.login);
     router.put('/api/users/updateUser/:_id',
         verifyUpload.single('profImg'),
         ensureDefaultImg,
         userController.updateUserData
     );
-
     router.get('/api/users/logout', userController.logOut);
     router.get('/api/users/getUser/:_id', userController.getUser);
     router.get('/api/users/getAvatar/:_id', userController.getUserAvatar);
-    router.get('/api/authenticate', authenticate, (req, res)=>{
+    router.get('/api/users/authenticate', authenticate, (req, res)=>{
         res.status(200).json({message: "user is authenticated"})
     })
     // Global multer/server error handler

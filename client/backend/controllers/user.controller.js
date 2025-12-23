@@ -31,6 +31,7 @@ module.exports.registerUser = async (req,res )=>{
 }
 
 module.exports.login = async (req, res)=>{
+    console.log(req.body.email);
     const {email, password} = req.body;
     const foundUser = await User.findOne({email});
     if(!foundUser) return res.status(400).json({err: "Invalid login credentials"});
@@ -44,6 +45,7 @@ module.exports.login = async (req, res)=>{
             delete userObj.password, delete userObj.profImg, delete userObj.confirmPassword, delete userObj.id;
             res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge: 1000 * 60 *120}).json({userData: userObj});
         }else{
+            console.log("This the error trip");
             res.status(500).json({err:"Issue with mutating user data for response"})
         }
     }catch(err){
@@ -99,7 +101,7 @@ module.exports.getUserAvatar = async (req,res) =>{
     }
 }
 
-module.exports.logOut = (res, req) =>{
+module.exports.logOut = (req, res) =>{
     res.clearCookie("userToken");
-    res.json({msg: "user logged out and cookies cleared"})
+    res.status(200).json({msg: "user logged out and cookies cleared"})
 }
