@@ -11,7 +11,7 @@ const FilmForm: React.FC<{setFilmData: Dispatch<SetStateAction<FilmType[]>>}> = 
             const fetchBody = new FormData();
             fetchBody.append('query', formData);
             try{
-                const fetchRes = await fetch('http://localhost:backend/api/films/search',{method: "GET", body:fetchBody});
+                const fetchRes = await fetch('http://localhost:backend/api/films/search',{method: "POST", body:fetchBody});
                 const filmData = await fetchRes.json();
                 if(!fetchRes.ok) {throw new Error(filmData.err || "Issue with Fetch")}
                 setFilmData(filmData);

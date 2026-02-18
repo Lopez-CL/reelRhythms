@@ -19,16 +19,18 @@ const LoginForm: React.FC = ()=>{
     const handleInput = Hooks.useNativeInput(userData, setUserData)
     const handleSubmit = async (e:React.MouseEvent<HTMLElement>) =>{
         e.preventDefault();
-        const loginData = new FormData();
-        loginData.append('email',userData.email)
-        loginData.append('password',userData.password)
         try{
             const resStatus = await fetch("http://localhost:8000/backend/api/users/login",{
-                method:"POST", body: loginData
+                method:"POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email: userData.email, password: userData.password})
             })
-            if(resStatus.status === 201) router.push('/dashboard');
+            const resData = await resStatus.json();
+            if(!resStatus.ok) throw new Error(resData.err || "Issue with login api")
+            if(resStatus.ok) router.push('/dashboard');
         }catch(err){
-            console.error(err)
+            const errMsg = err instanceof Error ? err.message: null
+            console.log(errMsg)
         }
     }
     return(
