@@ -21,13 +21,14 @@ const RegForm: React.FC = () => {
         multPtData.append("password", formData.password)
         multPtData.append("confirmPassword", formData.confirmPassword)
         if (formData.profImg instanceof File) multPtData.append("profImg", formData.profImg);
-        try {
-            fetch("http://localhost:8000/backend/api/users/register", { method: "POST", body: multPtData })
-                .then(() => {
-                    console.log("sent fetch")
-                    router.push('/dashboard')
-                })
-        } catch (e) { console.log(e) }
+        fetch("http://localhost:8000/backend/api/users/register", { method: "POST", body: multPtData })
+            .then(res => {
+                console.log("sent fetch", res.status)
+                if (!res.ok) return res.json().then(err => { console.log("Registration error:", err); throw err })
+                return res.json()
+            })
+            .then(() => router.push('/dashboard'))
+            .catch(e => console.log(e))
     }
     return (
         <form className="form form-register">

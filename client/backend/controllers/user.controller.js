@@ -33,12 +33,12 @@ module.exports.registerUser = async (req,res )=>{
 module.exports.login = async (req, res)=>{
     console.log(req.body.email);
     const {email, password} = req.body;
-    const foundUser = await User.findOne({email});
-    if(!foundUser) return res.status(400).json({err: "Invalid login credentials"});
     try{
+        const foundUser = await User.findOne({email});
+        if(!foundUser) return res.status(400).json({err: "Invalid login credentials"});
         const pwCheck = await bcrypt.compare(password, foundUser.password)
-        if(!pwCheck) res.status(400).json({err: "Invalid login credentials"});
-        const userToken = jwt.sign({_id: foundUser._id, email: foundUser.email}, KEY,{expiresIn:'2hr'});
+        if(!pwCheck) return res.status(400).json({err: "Invalid login credentials"});
+        const userToken = jwt.sign({_id: foundUser._id, email: foundUser.email}, KEY,{expiresIn:'2h'});
         if(foundUser.profImg && foundUser.password){
             let userObj = foundUser.toObject();
             userObj.imgUrl = `${req.protocol}://${req.get('host')}/api/users/getAvatar/${foundUser._id}`
@@ -49,6 +49,7 @@ module.exports.login = async (req, res)=>{
             res.status(500).json({err:"Issue with mutating user data for response"})
         }
     }catch(err){
+        console.log(err)
         res.status(400).json({err: "Invalid login credentials"});
     }
 }

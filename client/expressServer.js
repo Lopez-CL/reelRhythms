@@ -1,7 +1,5 @@
 const express = require('express');
 const next = require('next');
-const multer = require('multer');
-const upload = multer();
 // const cors =  require('cors');
 const cookieParser = require('cookie-parser');
 require('dotenv').config()
@@ -12,7 +10,6 @@ nextApp.prepare().then(()=>{
     const app = express();
     const PORT = process.env.PORT || 8000;
     app.use(express.json(), express.urlencoded({extended: true}));
-    app.use(upload.none())
     app.use(cookieParser())
     const backendRouter = require('./backend');
     app.use('/backend', backendRouter);
