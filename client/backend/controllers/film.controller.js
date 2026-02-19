@@ -8,11 +8,13 @@ module.exports.searchFilms = async (req, res) =>{
     try{
         const results = await fetch(fullURL);
         const filmsObj = await results.json()
-        if(results.json().length > 1) return res.status(201).json({filmsObj})
+        console.log(filmsObj)
+        if(filmsObj?.length > 1) return res.status(201).json({filmsObj})
             else return res.status(201).json({message:"No films were found"})
     }
     catch(err){
-        res.status(401).json({err:"unable to fetch film data"});
+        console.log(err)
+        res.status(501).json({err:"unable to fetch film data"});
     }
 }
 
