@@ -11,12 +11,14 @@ const FilmForm: React.FC<{setFilmData: Dispatch<SetStateAction<FilmType[]>>}> = 
             const fetchBody = new FormData();
             fetchBody.append('query', formData);
             try{
-                const fetchRes = await fetch('http://localhost:backend/api/films/search',{method: "POST", body:fetchBody});
+                const fetchRes = await fetch('http://localhost:8000/backend/api/films/search',{method: "POST",headers:{'Content-Type':'application/json'},body: JSON.stringify({query:formData}),credentials:'include'});
                 const filmData = await fetchRes.json();
                 if(!fetchRes.ok) {throw new Error(filmData.err || "Issue with Fetch")}
-                setFilmData(filmData);
+                console.log(filmData);
+                // setFilmData(filmData);
             }catch(error){
                 const errMsg = error instanceof Error&& error.message || null
+                console.log(errMsg)
             }
         }
     return(
