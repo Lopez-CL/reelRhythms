@@ -8,11 +8,10 @@ module.exports.searchFilms = async (req, res) => {
     let foundFilms = true;
     let pgNum = 1;
     try {
-        while(foundFilms){
+        while(foundFilms && pgNum <= 3){
             let fullURL = `${OMBD_URL}&s=${query}&page=${pgNum}`;
             let results = await fetch(fullURL);
             let filmsObj = await results.json();
-            console.log(filmsObj.Response)
             if(filmsObj.Response==="True"){
                 films.push(filmsObj.Search)
                 pgNum++

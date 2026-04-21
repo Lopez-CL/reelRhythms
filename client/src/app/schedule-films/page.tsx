@@ -1,9 +1,11 @@
 'use client'
 import FilmForm from '@/components/FilmForm';
+import ListFilms from '@/components/ListFilms';
+
 import {FilmType} from '@/types/filmType';
 import { useState } from 'react';
 export default function Page(){
-        const [filmData, setFilmData] = useState<FilmType[]>([]);
+        const [filmData, setFilmData] = useState<FilmType[][]>([]);
     return(
         <>
             <h1>Cue your Calendar</h1>
@@ -11,6 +13,7 @@ export default function Page(){
             <section>
                 <h2>Explore Films</h2>
                     <FilmForm setFilmData={setFilmData} ></FilmForm>
+                    <ListFilms filmData={filmData}></ListFilms>
             </section>
         </>
     )
